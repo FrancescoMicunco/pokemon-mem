@@ -1,3 +1,14 @@
 .App {
-  text-align: center;
+    text-align: center;
+    display: flexbox;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.flexbox {
+    background-color: chartreuse;
+    border: 2px solid rgb(2, 58, 11);
+    width: 20%;
+    display: inline-block;
+    margin: 2%;
 }

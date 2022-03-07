@@ -2,6 +2,7 @@ import { Form, Button } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
 import GameTable from './GameTable'
 import './homepage.css'
+import uniqid from 'uniqid'
 
 
 
@@ -10,6 +11,7 @@ const HomePage = () => {
     const [pokemon, setPokemon] = useState([])  // first 80 pokemon from API
     const [cardsSelected, setCardsSelected] = useState([])  //extract random cards from pokemon array. Those are n number as from level select
     const [play, setPlay] = useState(false)
+
 
     //  fetch dei pokemon da API e storage nello state
     const getPokemon = async () => {
@@ -26,14 +28,6 @@ const HomePage = () => {
         }
     }
 
-    // sul click, mostro la carta e la aggiungo all'arrai delle carte girate,
-    // attendo che nell'array ci siano due elementi, quindi controllo che siano
-    // differenti o uguali. Nel primo caso attendo 3 secondi e poi giro nuovamente le carte; 
-    // nel secondo caso le lascio scoperte e trasferisco il contenuto dell'array nell'array delle carte trovate
-    // aggiorno il contatore dei punti
-
-    const checkGame = (c) => { console.log("carta =>") }
-
 
     // estraggo random da pokemon.array un numero di pokemon pari a level/2 e sposto questi elementi in un array temporaneo
     const handleStartGame = (e) => {
@@ -47,32 +41,32 @@ const HomePage = () => {
         // creo una iterazione per il numero di carte che desidero
 
         for (let i = 0; i < 4; i++) {
-            console.log("newpoke =>", newPoke)
+
             // genero un numero casuale
             const rdm = Math.abs(Math.floor(Math.random() * 20) - (i + 1))
 
             // estraggo dall'array copia l'elemento con indice pari al random number
             let el = newPoke[rdm]
-            console.log("el =>", el)
+
             //  elimino l'elemento dall'array principale per evitare duplicazioni
             newPoke.splice(rdm, 1)
-            console.log("newPoke after splice =>", newPoke)
+
             //  aggiungo l'elemento all'array temporaneo delle carte scelte
             halfGameStack.push(el)
-            console.log("halfGame =>", halfGameStack)
+
 
             //  creo un array doppio di halfGameStack
             let newStack = [...halfGameStack, ...halfGameStack]
-            console.log("newStack =>", newStack)
+
 
             // mischio in modo casuale lo stack
             let shuffleStack = newStack.sort(() => Math.random() - 0.5)
-            console.log("newStack shuffle =>", newStack)
+
 
 
             //  setto il nuovo stato dello stack di carte
-            setCardsSelected(shuffleStack)
-            console.log("cardSelected", cardsSelected)
+            if (shuffleStack) setCardsSelected(shuffleStack)
+
 
         }
 
@@ -84,11 +78,10 @@ const HomePage = () => {
     // l'utente chiede di giocare   DONE
     // l'utente sceglie il livello   DONE
     // l'utente vede le carte scoperte per 5 secondi, in numero relativo al livello di difficoltà scelto
-    // l'utente seleziona la prima carta
-    // l'utente seleziona la seconda carta
-    // l'utente indovina o sbaglia
+    // l'utente seleziona la prima carta  DONE
+    // l'utente seleziona la seconda carta  DONE
+    // l'utente indovina o sbaglia  DONE
     //l'utente indovina tutte le carte
-
 
 
     // first call for getting pokemon
@@ -117,11 +110,12 @@ const HomePage = () => {
             </div>
 
 
-            <div className='cardStack'>{
-                cardsSelected?.map(card =>
-                    <GameTable key={card.index} card={card} onClick={() => console.log('card')} />)
+            <div className='cardStack' >{
+                cardsSelected?.map((card, index) =>
 
-            }</div>
+                    <GameTable key={index} card={card} />
+
+                )}</div>
 
         </>)
 

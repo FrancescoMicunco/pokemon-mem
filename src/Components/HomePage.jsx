@@ -1,6 +1,9 @@
 import { Form, Button } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
 import GameTable from './GameTable'
+import './homepage.css'
+
+
 
 const HomePage = () => {
     const [level, setLevel] = useState(undefined)  // Select the difficult level
@@ -8,7 +11,7 @@ const HomePage = () => {
     const [cardsSelected, setCardsSelected] = useState([])  //extract random cards from pokemon array. Those are n number as from level select
     const [play, setPlay] = useState(false)
 
-    //  getting pokemon and store it in state
+    //  fetch dei pokemon da API e storage nello state
     const getPokemon = async () => {
         try {
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=0&limit=20`)
@@ -23,7 +26,16 @@ const HomePage = () => {
         }
     }
 
-    // 1) estraggo random da pokemon.array un numero di pokemon pari a level/2 e sposto questi elementi in un array temporaneo
+    // sul click, mostro la carta e la aggiungo all'arrai delle carte girate,
+    // attendo che nell'array ci siano due elementi, quindi controllo che siano
+    // differenti o uguali. Nel primo caso attendo 3 secondi e poi giro nuovamente le carte; 
+    // nel secondo caso le lascio scoperte e trasferisco il contenuto dell'array nell'array delle carte trovate
+    // aggiorno il contatore dei punti
+
+    const checkGame = (c) => { console.log("carta =>") }
+
+
+    // estraggo random da pokemon.array un numero di pokemon pari a level/2 e sposto questi elementi in un array temporaneo
     const handleStartGame = (e) => {
         e.preventDefault();
         setPlay(true)
@@ -68,22 +80,14 @@ const HomePage = () => {
     }
 
 
-
-
-
-    // 2) creo un nuovo array con spread operator in modo da duplicare gli elementi dell'array temporaneo  DONE
-    // 3) dispongo in modo casuale gli elementi dell'array nuovo  DONE
-
     // LOGICA DEL GIOCO
     // l'utente chiede di giocare   DONE
     // l'utente sceglie il livello   DONE
-    // l'utente vede le carte coperte in numero relativo al livello di difficoltà scelto
+    // l'utente vede le carte scoperte per 5 secondi, in numero relativo al livello di difficoltà scelto
     // l'utente seleziona la prima carta
     // l'utente seleziona la seconda carta
     // l'utente indovina o sbaglia
     //l'utente indovina tutte le carte
-
-
 
 
 
@@ -95,13 +99,13 @@ const HomePage = () => {
         <>
             <h1 > POKEMON MEMORY GAME </h1>
 
-            <div>
-                <h5 style={play ? { display: 'none' } : { display: 'block' }}>select level</h5>
+            <div >
+                <h5 style={play ? { display: 'none' } : { display: 'block', marginBottom: '5px' }}>select level</h5>
 
 
                 <Form.Select aria-label="Default select example"
                     size="sm"
-                    onChange={(e) => { setLevel(e.target.value); console.log("this is the level from form", level) }}
+                    onChange={(e) => { setLevel(e.target.value) }}
                     style={play ? { display: 'none' } : { display: 'block' }}>
 
                     <option value="6">Select your level</option>
@@ -109,12 +113,13 @@ const HomePage = () => {
                     <option value="10">Medium</option>
                     <option value="16">Hard</option>
                 </Form.Select>
+                <Button style={level ? { display: 'block' } : { display: 'none' }} onClick={handleStartGame}>Start new game</Button>
             </div>
-            <Button style={level ? { display: 'block' } : { display: 'none' }} onClick={handleStartGame}>Start new game</Button>
-            <div>{
-                cardsSelected?.map(card =>
-                    <GameTable key={card.id} card={card} />)
 
+
+            <div className='cardStack'>{
+                cardsSelected?.map(card =>
+                    <GameTable key={card.index} card={card} onClick={() => console.log('card')} />)
 
             }</div>
 

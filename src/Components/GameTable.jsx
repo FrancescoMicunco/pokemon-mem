@@ -1,3 +1,6 @@
+import './homepage.css'
+
+
 const GameTable = ({ card }) => {
 
     let str = card.url
@@ -11,7 +14,7 @@ const GameTable = ({ card }) => {
     const spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
     return (
 
-        <div >
+        <div className='card'>
             <img variant="top"
                 src={`${spriteUrl}${substr}.png`}
                 alt={card.name}
@@ -25,4 +28,3 @@ const GameTable = ({ card }) => {
 }
 export default GameTable
 
-// ${ card.indexOf(card) + 1

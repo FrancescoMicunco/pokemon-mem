@@ -1,0 +1,27 @@
+.cardStack {
+    margin-top: 10%;
+    display: flex;
+    padding-left: 10%;
+}
+
+.card {
+    background-color: rgb(14, 255, 14);
+    margin-right: 2%;
+    box-shadow: 3px 3px rgba(0, 0, 0, 0.247);
+}
+
+.card:hover {
+    background-color: rgb(15, 221, 15);
+    margin-right: 2%;
+    box-shadow: 3px 3px rgba(0, 0, 0, 0.247);
+}
+
+.card:active {
+    background-color: rgb(17, 194, 17);
+    margin-right: 2%;
+    box-shadow: 3px 3px rgba(0, 0, 0, 0.247);
+}
+
+h5:hover {
+    cursor: pointer;
+}

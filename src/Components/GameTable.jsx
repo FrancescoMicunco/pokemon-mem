@@ -2,29 +2,25 @@ import './homepage.css'
 import { useState, useEffect } from 'react'
 
 
-let cardsToCheck = []
-let checkeCdCards = []
 
 
-// sul click, mostro la carta e la aggiungo all'arrai delle carte girate,
+
+// sul click, mostro la carta e la aggiungo all'array delle carte girate,
 
 // attendo che nell'array ci siano due elementi, quindi controllo che siano  DONE
-// differenti o uguali. Nel primo caso attendo 3 secondi e poi giro nuovamente le carte; 
+// differenti o uguali. Nel primo caso attendo 3 secondi e poi giro nuovamente le carte;
 // nel secondo caso le lascio scoperte e trasferisco il contenuto dell'array nell'array delle carte trovate
 // aggiorno il contatore dei punti
 
+let okCards = []
+let i = []
+let n = []
+
+const GameTable = (card, { setScore, score }) => {
+    const [isActive, setIsActive] = useState(false)
 
 
-
-
-
-
-const GameTable = ({ card }) => {
-    const [score, setScore] = useState(null)
-    const [isOk, setIsOk] = useState(false)
-
-
-    let str = card.url
+    let str = card.card.url
 
     //  estraggo il numero del singolo pokemon dall'url di base per recuperare l'url dello sprite
     let substr = str.substr(-3).split('').slice(0, 2).filter(filter).reduce((i, c) => i + c)
@@ -35,59 +31,90 @@ const GameTable = ({ card }) => {
 
     const spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
 
-    const checkGame = (e) => {
-        console.log("value", e.target.innerText)
-        console.log("cardsTocheck", cardsToCheck)
-        //  aggiungo la carta selezionata all'array di controllo
-        cardsToCheck?.push(e.target.innerText)
+    const isShow = () => {
+        let isShow = true
+        return
+    }
 
-        //  verifico che le due carte siano state selezionate e poi eseguo il controllo tra loro
-        // if (cardsToCheck.length < 2) {
-        //     (alert("scegli un'altra carta"))
+    const isUnShow = () => {
+        let isShow = false
+        return
+    }
 
-        // } else
-        if (cardsToCheck.length === 2) {
-            // let add = cardsToCheck.slice()   variabile utile a creare l'array
-            if (cardsToCheck[0] === cardsToCheck[1]) {
+    const addCard = (e) => {
+        e.preventDefault()
+        let iPokemon = e.target.lastChild.innerText //index del pokemon
 
-                alert('bravo hai indovinato!')
-                if (checkeCdCards.length < card.length) {
+        let name = e.target.innerText //name del pokemon
 
-                    checkeCdCards = [...checkeCdCards, add]
-                    console.log("carte indovinate", checkeCdCards)
+        // "n" è l'array dei nomi e "i" è l'array degli indici
+        setIsActive(true)
+        if (n.length !== 0) {
+            if (i[0] === i[1]) {
+                alert("hai selezionato la stessa carta")
+                return
+            } else {
+                i.push(iPokemon)
 
-                    cardsToCheck = []
-                    console.log("dopo il gioco", cardsToCheck)
+                n.push(name)
+            }
+        } else {
+            i.push(iPokemon)
 
-                } else {
-                    alert("complimenti! Hai completato il gioco")
-                    checkeCdCards = []
-                    console.log("carte indovinate", checkeCdCards)
+            n.push(name)
+        }
+
+        if (i.length == 2) {
+            if ((i[0] !== i[1]) && (n[0] === n[1])) {
+
+                alert(`indovinato`);
+                setScore([score += 1])
+                console.log("this is the score", score)
+                let tempArr = i.slice();
+
+                okCards = [...okCards, tempArr]
+                i = [];
+                n = [];
+
+                if (okCards.length == 4) {
+                    alert("complimenti hai VINTO!")
                 }
             } else {
-                alert("allenati ancora!");
+                alert(`allenati di più`);
+                i = [];
+                n = [];
 
-                cardsToCheck = []
-                console.log("dopo il gioco", cardsToCheck)
             }
+            setIsActive(false)
         }
     }
 
 
     return (
-
-        <div className='card'>
+        isActive ? <div className='card'>
             <img variant="top"
                 src={`${spriteUrl}${substr}.png`}
-                alt={card.name}
+                alt={card.card.name}
             />
-
-            <h5 value={card.name} onClick={(e) => checkGame(e)}> {card.name} </h5>
+            <h5 onClick={(e) => addCard(e)}> {card.card.name}
+                <span style={{ display: "none" }}>{card.i}</span></h5>
 
         </div>
+            :
+
+            <div className='card'>
+                <img variant="top"
+                    src={`${spriteUrl}${substr}.png`}
+                    alt={card.card.name}
+                    style={{ opacity: "0.0" }}
+                />
+                <h5 onClick={(e) => addCard(e)} style={{ opacity: "0.0" }}> {card.card.name}
+                    <span style={{ display: "none" }}>{card.i}</span></h5>
+
+            </div>
+
 
     )
-
 }
 export default GameTable
 

@@ -7,11 +7,11 @@ import uniqid from 'uniqid'
 
 
 const HomePage = () => {
-    const [level, setLevel] = useState(undefined)  // Select the difficult level
+    const [level, setLevel] = useState(6)  // Select the difficult level
     const [pokemon, setPokemon] = useState([])  // first 80 pokemon from API
     const [cardsSelected, setCardsSelected] = useState([])  //extract random cards from pokemon array. Those are n number as from level select
     const [play, setPlay] = useState(false)
-
+    const [score, setScore] = useState(0)
 
     //  fetch dei pokemon da API e storage nello state
     const getPokemon = async () => {
@@ -73,17 +73,6 @@ const HomePage = () => {
 
     }
 
-
-    // LOGICA DEL GIOCO
-    // l'utente chiede di giocare   DONE
-    // l'utente sceglie il livello   DONE
-    // l'utente vede le carte scoperte per 5 secondi, in numero relativo al livello di difficoltà scelto
-    // l'utente seleziona la prima carta  DONE
-    // l'utente seleziona la seconda carta  DONE
-    // l'utente indovina o sbaglia  DONE
-    //l'utente indovina tutte le carte
-
-
     // first call for getting pokemon
     useEffect(() => { getPokemon() }, [])
 
@@ -107,13 +96,15 @@ const HomePage = () => {
                     <option value="16">Hard</option>
                 </Form.Select>
                 <Button style={level ? { display: 'block' } : { display: 'none' }} onClick={handleStartGame}>Start new game</Button>
+                <h2>Your score is <span>{score}</span></h2>
             </div>
 
 
             <div className='cardStack' >{
+
                 cardsSelected?.map((card, index) =>
 
-                    <GameTable key={index} card={card} />
+                    <GameTable key={index} i={uniqid()} card={card} setScore={() => setScore()} score={score} />
 
                 )}</div>
 
